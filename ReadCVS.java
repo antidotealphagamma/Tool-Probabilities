@@ -6,10 +6,15 @@ import java.util.*;
 
 public class ReadCVS {
 
+    //instance variables
+    private static HashMap<String, Integer> outSize = new HashMap<String, Integer>();
+    private static ArrayList<StringBuilder> names = new ArrayList<StringBuilder>();
+    //ArrayList<String> namesB = null;
 
     public static void main(String[] args) {
         ReadCVS obj = new ReadCVS();
         obj.run();
+        obj.printProbabilities(names, outSize);
     }
 
     private void run() {
@@ -48,8 +53,8 @@ public class ReadCVS {
             //Generate User ArrayList for all tools and store in map
             while ((line = br1.readLine()) != null) {
                 String[] inLine = line.split(cvsSplitBy);
-                String companyName, toolName;
-                companyName = inLine[1];
+                String toolName;
+                //companyName = inLine[1];
                 toolName = inLine[2];
                 if (!userMap.containsKey(toolName)) {
                     userMap.put(toolName, new ArrayList<String>());
@@ -87,6 +92,7 @@ public class ReadCVS {
                     calculateProbability(userMap.get(tool), userMap.get(toolName), tool, toolName);
                 }
             }
+            //printProbabilities(names, outSize);
 
             //for (String key: userMap.keySet()) System.out.println(key);
             //System.out.println(userMap);
@@ -147,8 +153,8 @@ public class ReadCVS {
         float divisor = combinedCount;
         p1 = (divisor / a.size());
         p2 = (divisor / b.size());
-        int factoredA = (int)p1 * 100;
-        int factoredB = (int)p2 * 100;
+        int factoredA = (int) p1 * 100;
+        int factoredB = (int) p2 * 100;
 
         //See size
 //        if (a.size() > 10 && b.size() > 10) {
@@ -160,39 +166,75 @@ public class ReadCVS {
         PrintStream out = null;
 
         if (p1 != 0 && p2 != 0 && combinedCount != 0) {
-            try {
-                //Create FileWriter object
 
-                out = new PrintStream(new FileOutputStream("example22.txt"));
+            //Build strings to be added on the ArrayLists
+            StringBuilder sb = new StringBuilder();
+            sb.append(toolNameA);
+            sb.append(": ");
+            sb.append(a.size());
+            sb.append(", ");
+            sb.append(toolNameB);
+            sb.append(": ");
+            sb.append(b.size());
 
+            //Add to ArrayLists of names and size
+            names.add(sb);
 
-                  //Debugging
-                
+            //Put name and probabilities in the HashMap
+            //if ((!outSize.containsKey((toolNameA)) || !outSize.containsKey(toolNameB))) {
+            outSize.put(toolNameA, factoredA);
+            outSize.put(toolNameB, factoredB);
+            //}
+//            else {
+//                if (outSize.get(toolNameA) >= factoredA) outSize.put(toolNameA, factoredA);
+//                if (outSize.get(toolNameB) >= factoredB) outSize.put(toolNameB, factoredB);
+//                if (outSize.get(toolNameA) >= factoredA && outSize.get(toolNameB) >= p2) {
+//                    outSize.put(toolNameA, factoredA);
+//                    outSize.put(toolNameB, factoredB);
+//                }
+            }
+    }
+
+    public void printProbabilities(ArrayList<StringBuilder> names, HashMap<String, Integer> map) {
+        PrintStream out = null;
+
+        try {
+            //Create FileWriter object
+            out = new PrintStream(new FileOutputStream("example22.txt"));
+
+            //Debugging
+
 //                System.out.println("------------------");
 //                System.out.println("Count of " + toolNameA +  " users is: " +  a.size());
 //                System.out.println("Count of " + toolNameB + " users is: " + b.size());
 //                System.out.println("Count of users who use both " + toolNameA + " and " +
-//                        toolNameB + " is: " + combinedCount);
+            //                        toolNameB + " is: " + combinedCount);
 //                System.out.printf("Probability for " +  toolNameA + " is %.3f, probabilty for " +
 //                        toolNameB +" is %.3f \n", p1, p2);
 
-                
-                //Write to text file
-                out.println("------------------");
-                out.println("Count of " + toolNameA +  " users is: " +  a.size());
-                out.println("Count of " + toolNameB + " users is: " + b.size());
-                out.println("Count of users who use both " + toolNameA + " and " +
-                 toolNameB + " is: " + combinedCount);
-                out.printf("Probability for " +  toolNameA + " is %.3f, probabilty for " +
-                        toolNameB +" is %.3f \n", p1, p2);
 
-                //Close writer
-                out.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            //Write to text file
+            out.println("------------------");
+            //out.println("Count of " + toolNameA + " users is: " + a.size());
+            //out.println("Count of " + toolNameB + " users is: " + b.size());
+            //out.println("Count of users who use both " + toolNameA + " and " +
+            //        toolNameB + " is: " + combinedCount);
+            //out.printf("Probability for " + toolNameA + " is %.3f, probabilty for " +
+            //        toolNameB + " is %.3f \n", p1, p2);
+            for (int i = 0; i < names.size(); i++) {
+                out.println(names.get(i));
             }
 
+            for (String key : map.keySet()) {
+                out.println(key);
+                out.println(map.get(key));
             }
+
+            //Close writer
+            out.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+}
