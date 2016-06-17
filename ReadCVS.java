@@ -9,7 +9,7 @@ public class ReadCVS {
     //instance variables
     private static HashMap<String, Integer> outSize = new HashMap<String, Integer>();
     private static ArrayList<StringBuilder> names = new ArrayList<StringBuilder>();
-    //ArrayList<String> namesB = null;
+    private static ArrayList<StringBuilder> probabilities = new ArrayList<StringBuilder>();
 
     public static void main(String[] args) {
         ReadCVS obj = new ReadCVS();
@@ -180,19 +180,42 @@ public class ReadCVS {
             //Add to ArrayLists of names and size
             names.add(sb);
 
-            //Put name and probabilities in the HashMap
-            //if ((!outSize.containsKey((toolNameA)) || !outSize.containsKey(toolNameB))) {
-            outSize.put(toolNameA, factoredA);
-            outSize.put(toolNameB, factoredB);
-            //}
-//            else {
+            StringBuilder build = new StringBuilder();
+
+
+
+            build.append("(");
+            build.append(toolNameA);
+            build.append(",");
+            build.append(toolNameB);
+            build.append(")");
+            build.append(" is: ");
+            build.append(combinedCount);
+            build.append(" -- ");
+            build.append("Probability for ");
+            build.append(toolNameA);
+            build.append(" is: ") ;
+            build.append(p1);
+            build.append(" and the probability for ");
+            build.append(toolNameB);
+            build.append(" is: ");
+            build.append(p2);
+
+            probabilities.add(build);
+
+//            //Put name and probabilities in the HashMap
+//            if ((!outSize.containsKey((toolNameA)) || !outSize.containsKey(toolNameB))) {
+//                outSize.put(toolNameA, factoredA);
+//                outSize.put(toolNameB, factoredB);
+//            } else {
 //                if (outSize.get(toolNameA) >= factoredA) outSize.put(toolNameA, factoredA);
 //                if (outSize.get(toolNameB) >= factoredB) outSize.put(toolNameB, factoredB);
 //                if (outSize.get(toolNameA) >= factoredA && outSize.get(toolNameB) >= p2) {
 //                    outSize.put(toolNameA, factoredA);
 //                    outSize.put(toolNameB, factoredB);
 //                }
-            }
+//            }
+        }
     }
 
     public void printProbabilities(ArrayList<StringBuilder> names, HashMap<String, Integer> map) {
@@ -202,19 +225,8 @@ public class ReadCVS {
             //Create FileWriter object
             out = new PrintStream(new FileOutputStream("example22.txt"));
 
-            //Debugging
-
-//                System.out.println("------------------");
-//                System.out.println("Count of " + toolNameA +  " users is: " +  a.size());
-//                System.out.println("Count of " + toolNameB + " users is: " + b.size());
-//                System.out.println("Count of users who use both " + toolNameA + " and " +
-            //                        toolNameB + " is: " + combinedCount);
-//                System.out.printf("Probability for " +  toolNameA + " is %.3f, probabilty for " +
-//                        toolNameB +" is %.3f \n", p1, p2);
-
-
             //Write to text file
-            out.println("------------------");
+            out.println("=========================");
             //out.println("Count of " + toolNameA + " users is: " + a.size());
             //out.println("Count of " + toolNameB + " users is: " + b.size());
             //out.println("Count of users who use both " + toolNameA + " and " +
@@ -223,12 +235,25 @@ public class ReadCVS {
             //        toolNameB + " is %.3f \n", p1, p2);
             for (int i = 0; i < names.size(); i++) {
                 out.println(names.get(i));
+                out.println("=================================");
             }
+            out.println("=================================");
+            out.println("=================================");
+            out.println("!!Probability Calculations!!");
+            out.println("=================================");
+            out.println("=================================");
 
-            for (String key : map.keySet()) {
-                out.println(key);
-                out.println(map.get(key));
+            for (int i = 0; i < probabilities.size(); i++) {
+                out.println(probabilities.get(i));
+                out.println("=================================");
             }
+//            for (String key : map.keySet()) {
+//                out.print(key);
+//                out.print(": ");
+//                out.print(map.get(key));
+//                out.print("\n");
+//                out.println("~~~~~~~~~~~~~~~~~~~");
+//            }
 
             //Close writer
             out.close();
