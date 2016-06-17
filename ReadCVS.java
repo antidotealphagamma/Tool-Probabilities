@@ -166,6 +166,7 @@ public class ReadCVS {
                 out = new PrintStream(new FileOutputStream("example22.txt"));
 
 
+                  //Debugging
 
 //                System.out.println("------------------");
 //                System.out.println("Count of " + toolNameA +  " users is: " +  a.size());
@@ -174,6 +175,7 @@ public class ReadCVS {
 //                        toolNameB + " is: " + combinedCount);
 //                System.out.printf("Probability for " +  toolNameA + " is %.3f, probabilty for " +
 //                        toolNameB +" is %.3f \n", p1, p2);
+
 
                 //Write to text file
                 out.println("------------------");
