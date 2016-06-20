@@ -6,24 +6,25 @@ import java.util.*;
 
 public class ReadCVS {
 
-    //instance variables
+    //Instance Variables
     private static HashMap<String, Integer> outSize = new HashMap<String, Integer>();
     private static ArrayList<StringBuilder> names = new ArrayList<StringBuilder>();
-    //ArrayList<String> namesB = null;
+    private static ArrayList<StringBuilder> probabilities = new ArrayList<StringBuilder>();
 
+    //Main program
     public static void main(String[] args) {
         ReadCVS obj = new ReadCVS();
         obj.run();
         obj.printProbabilities(names, outSize);
     }
 
+    //
     private void run() {
 
         String csvFile = "/Users/nielskjer/Downloads/trial.csv";
         BufferedReader br1 = null;
-        BufferedReader br2 = null;
         BufferedReader br3 = null;
-        BufferedReader br4 = null;
+
         String line = "";
         String cvsSplitBy = ",";
 
@@ -32,75 +33,45 @@ public class ReadCVS {
             FrequencyTable freq = new FrequencyTable(csvFile);
             //freq.print();
 
-            //generate list of all the tools used
-            ArrayList<String> allTools = freq.generate();
-
-            for (int i = 0; i < allTools.size(); i++) {
-                String name = allTools.get(i);
-
-                ArrayList<String> tool = new ArrayList();
-                //System.out.println(name);
-
-            }
             //Create BufferedReader object
             br1 = new BufferedReader(new FileReader(csvFile));
-            br2 = new BufferedReader(new FileReader(csvFile));
             br3 = new BufferedReader(new FileReader(csvFile));
 
-            //Create Hashmap
+            //Create Hashmaps
             HashMap<String, ArrayList<String>> userMap = new HashMap<String, ArrayList<String>>();
 
             //Generate User ArrayList for all tools and store in map
             while ((line = br1.readLine()) != null) {
                 String[] inLine = line.split(cvsSplitBy);
-                String toolName;
-                //companyName = inLine[1];
+                String toolName, companyName;
+                companyName = inLine[1];
                 toolName = inLine[2];
-                if (!userMap.containsKey(toolName)) {
-                    userMap.put(toolName, new ArrayList<String>());
-                }
-                //Testing: Show key values
-                //for (String key : userMap.keySet()) System.out.println(key);
+
+                userMap.put(toolName, new ArrayList<String>());
+                userMap.get(toolName).add(companyName);
             }
 
-            //ArrayList<String> tool1Users = new ArrayList();
-            //ArrayList<String> tool2Users = new ArrayList();
-            //int toolACount = 0, toolBCount = 0;
-
+            //Keep reading line until nothing needs to be read
             while ((line = br3.readLine()) != null) {
                 String[] array = line.split(cvsSplitBy);
                 String companyName, toolName;
                 companyName = array[1];
                 toolName = array[2];
 
+                //Checks if a tool is in the line being read and add it to list if true
+                if (userMap.containsKey(toolName)) {
+                    userMap.get(toolName).add(companyName);
+                }
 
-                //check if tool is in the line and add to list
+                /* Note: Solution is overtly slow and needs to be improved.
+                 */
                 for (String tool : userMap.keySet()) {
-                    if (!userMap.get(toolName).contains(companyName)) {
-                        userMap.get(toolName).add(companyName);
+                    for (String freqKey : freq.keySet()) {
+                        if (userMap.containsKey(freqKey)) {
+                            calculateProbability(userMap.get(tool), userMap.get(toolName), tool, toolName);
+                        }
                     }
                 }
-//
-//                int count = 0;
-//                for (String tool : userMap.keySet()) {
-//                    count++;
-//                }
-
-                //System.out.printf("%d\n", count);
-
-                for (String tool : userMap.keySet()) {
-                    calculateProbability(userMap.get(tool), userMap.get(toolName), tool, toolName);
-                }
-            }
-            //printProbabilities(names, outSize);
-
-            //for (String key: userMap.keySet()) System.out.println(key);
-            //System.out.println(userMap);
-
-
-            //testing purposes
-            //calculateProbability(tool1Users, tool2Users);
-
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -115,16 +86,13 @@ public class ReadCVS {
                 }
             }
         }
-
         System.out.println("Done");
-
     }
 
     /* @Params:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     First two arguments take an ArrayList of users who use a particular tool.
     Last two arguments take the name of the tools, ergo the key of the Hashmap reference.
-    Final argument takes the filename for output.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      */
     public void calculateProbability(ArrayList<String> a, ArrayList<String> b, String toolNameA,
@@ -153,20 +121,12 @@ public class ReadCVS {
         float divisor = combinedCount;
         p1 = (divisor / a.size());
         p2 = (divisor / b.size());
-        int factoredA = (int) p1 * 100;
-        int factoredB = (int) p2 * 100;
-
-        //See size
-//        if (a.size() > 10 && b.size() > 10) {
-//            System.out.println("-------------------");
-//            System.out.println(a + " size is " + a.size());
-//            System.out.println(b + " size is " + b.size());
-//        }
+        //int factoredA = (int) p1 * 100;
+        //int factoredB = (int) p2 * 100;
 
         PrintStream out = null;
-
+        
         if (p1 != 0 && p2 != 0 && combinedCount != 0) {
-
             //Build strings to be added on the ArrayLists
             StringBuilder sb = new StringBuilder();
             sb.append(toolNameA);
@@ -180,59 +140,67 @@ public class ReadCVS {
             //Add to ArrayLists of names and size
             names.add(sb);
 
-            //Put name and probabilities in the HashMap
-            //if ((!outSize.containsKey((toolNameA)) || !outSize.containsKey(toolNameB))) {
-            outSize.put(toolNameA, factoredA);
-            outSize.put(toolNameB, factoredB);
-            //}
-//            else {
-//                if (outSize.get(toolNameA) >= factoredA) outSize.put(toolNameA, factoredA);
-//                if (outSize.get(toolNameB) >= factoredB) outSize.put(toolNameB, factoredB);
-//                if (outSize.get(toolNameA) >= factoredA && outSize.get(toolNameB) >= p2) {
-//                    outSize.put(toolNameA, factoredA);
-//                    outSize.put(toolNameB, factoredB);
-//                }
-            }
+            StringBuilder build = new StringBuilder();
+
+            build.append("(");
+            build.append(toolNameA);
+            build.append(",");
+            build.append(toolNameB);
+            build.append(")");
+            build.append(" is: ");
+            build.append(combinedCount);
+            build.append(" -- ");
+            build.append("Probability for ");
+            build.append(toolNameA);
+            build.append(" is: ") ;
+            build.append(p1);
+            build.append(" and the probability for ");
+            build.append(toolNameB);
+            build.append(" is: ");
+            build.append(p2);
+
+            probabilities.add(build);
+            
+        }
     }
-
+    
+    /*  Method outputs numerical results to a txt file using a PrintStream.
+        @Params:
+        We take an input of names and map of probabilities to access our data. 
+     */
     public void printProbabilities(ArrayList<StringBuilder> names, HashMap<String, Integer> map) {
+        //Initialize the PrintStream
         PrintStream out = null;
-
+        
         try {
             //Create FileWriter object
             out = new PrintStream(new FileOutputStream("example22.txt"));
 
-            //Debugging
-
-//                System.out.println("------------------");
-//                System.out.println("Count of " + toolNameA +  " users is: " +  a.size());
-//                System.out.println("Count of " + toolNameB + " users is: " + b.size());
-//                System.out.println("Count of users who use both " + toolNameA + " and " +
-            //                        toolNameB + " is: " + combinedCount);
-//                System.out.printf("Probability for " +  toolNameA + " is %.3f, probabilty for " +
-//                        toolNameB +" is %.3f \n", p1, p2);
-
-
             //Write to text file
-            out.println("------------------");
-            //out.println("Count of " + toolNameA + " users is: " + a.size());
-            //out.println("Count of " + toolNameB + " users is: " + b.size());
-            //out.println("Count of users who use both " + toolNameA + " and " +
-            //        toolNameB + " is: " + combinedCount);
-            //out.printf("Probability for " + toolNameA + " is %.3f, probabilty for " +
-            //        toolNameB + " is %.3f \n", p1, p2);
+            out.println("=========================");
             for (int i = 0; i < names.size(); i++) {
                 out.println(names.get(i));
+                //Separate name entries
+                out.println("=================================");
             }
-
-            for (String key : map.keySet()) {
-                out.println(key);
-                out.println(map.get(key));
+            
+            //Set marker for calculations
+            out.println("=================================");
+            out.println("=================================");
+            out.println("!!Probability Calculations!!");
+            out.println("=================================");
+            out.println("=================================");
+            
+            //Write probabilities
+            for (int i = 0; i < probabilities.size(); i++) {
+                out.println(probabilities.get(i));
+                //Separate probability entries
+                out.println("=================================");
             }
-
+            
             //Close writer
             out.close();
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
