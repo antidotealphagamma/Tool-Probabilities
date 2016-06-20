@@ -14,6 +14,9 @@ There are multiple iterations of the same datapoint. For example, each permutati
 
 This is a huge problem -- as the dataset now not only contains each binary-relative permutation for each tool, but also the iteratively incrementing data. The final text file generated is 314.6MB, which is excessive to say the least. 
 
+Another problem we found was the inconsistency of some results in the dataset. Cross-checking the probability figures with results found from Excel, the count of some tools were off for some firms. This could possibly be due to the parsing of the original csv file, where some fields would not be picked up due to formatting errors. 
+
+
 ====================================================================================================
 Sample output:
 
