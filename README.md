@@ -28,4 +28,4 @@ These figures were taken directly from the produced "example22.txt" file.
 ========================================================================================================
 Retrieving the correct data:
 
-Since there are redundant iterations of the data as it builds up, we need to retrieve the finalmost datapoint. We can do so in a text editor by crudely searching for the entry fields "(Company#1,Company#2)" and locating the final version. 
+Since there are redundant iterations of the data as it builds up, we need to retrieve the finalmost datapoint. We can do so in a text editor by crudely searching for the entry fields "(Company#1,Company#2)" and locating the final version through the use of the back button.  
