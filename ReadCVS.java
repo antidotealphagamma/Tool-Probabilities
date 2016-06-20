@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class ReadCSV {
+public class ReadCVS {
 
     //Instance Variables
     private static HashMap<String, Integer> outSize = new HashMap<String, Integer>();
@@ -13,12 +13,12 @@ public class ReadCSV {
 
     //Main program
     public static void main(String[] args) {
-        ReadCSV obj = new ReadCSV();
+        ReadCVS obj = new ReadCVS();
         obj.run();
         obj.printProbabilities(names, outSize);
     }
 
-    
+
     private void run() {
 
         String csvFile = "/Users/nielskjer/Downloads/trial.csv";
