@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class ReadCVS {
+public class ReadCSV {
 
     //Instance Variables
     private static HashMap<String, Integer> outSize = new HashMap<String, Integer>();
@@ -13,12 +13,12 @@ public class ReadCVS {
 
     //Main program
     public static void main(String[] args) {
-        ReadCVS obj = new ReadCVS();
+        ReadCSV obj = new ReadCSV();
         obj.run();
         obj.printProbabilities(names, outSize);
     }
 
-    //
+    
     private void run() {
 
         String csvFile = "/Users/nielskjer/Downloads/trial.csv";
@@ -125,7 +125,7 @@ public class ReadCVS {
         //int factoredB = (int) p2 * 100;
 
         PrintStream out = null;
-        
+
         if (p1 != 0 && p2 != 0 && combinedCount != 0) {
             //Build strings to be added on the ArrayLists
             StringBuilder sb = new StringBuilder();
@@ -160,18 +160,18 @@ public class ReadCVS {
             build.append(p2);
 
             probabilities.add(build);
-            
+
         }
     }
-    
+
     /*  Method outputs numerical results to a txt file using a PrintStream.
         @Params:
-        We take an input of names and map of probabilities to access our data. 
+        We take an input of names and map of probabilities to access our data.
      */
     public void printProbabilities(ArrayList<StringBuilder> names, HashMap<String, Integer> map) {
         //Initialize the PrintStream
         PrintStream out = null;
-        
+
         try {
             //Create FileWriter object
             out = new PrintStream(new FileOutputStream("example22.txt"));
@@ -183,24 +183,24 @@ public class ReadCVS {
                 //Separate name entries
                 out.println("=================================");
             }
-            
+
             //Set marker for calculations
             out.println("=================================");
             out.println("=================================");
             out.println("!!Probability Calculations!!");
             out.println("=================================");
             out.println("=================================");
-            
+
             //Write probabilities
             for (int i = 0; i < probabilities.size(); i++) {
                 out.println(probabilities.get(i));
                 //Separate probability entries
                 out.println("=================================");
             }
-            
+
             //Close writer
             out.close();
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
