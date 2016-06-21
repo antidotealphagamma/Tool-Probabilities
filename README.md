@@ -6,6 +6,7 @@ tool X, the probability p that n people would use another tool Y. We can do so
 for each tool by calculating relative permutations on tool associations and output the results to
 a txt file. These figures are important because we can analyze the likelihood someone will use another tool Y, given they already use tool X. We can answer interesting questions, such as: "if a user is using Google docs, whats the likelihood that they are also using Slack?".
 
+Path: 
 Currently the path is set for the "trial.csv" file in my personal downloads folder. Where csvFile, a variable of type string is the path of the dataset to be processed. Change this to the path that leads to the specified dataset. 
 
 =========================================================================================
